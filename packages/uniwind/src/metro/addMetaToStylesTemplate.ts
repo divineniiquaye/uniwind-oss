@@ -1,6 +1,7 @@
+import { Platform } from '../common/consts'
 import { StyleDependency } from '../types'
 import { ProcessorBuilder } from './processor'
-import { Platform, StyleSheetTemplate } from './types'
+import { StyleSheetTemplate } from './types'
 import { isDefined, serialize, toCamelCase } from './utils'
 
 const extractVarsFromString = (value: string) => {
@@ -53,8 +54,13 @@ export const addMetaToStylesTemplate = (Processor: ProcessorBuilder, currentPlat
                     .flatMap(([property, value]) => Processor.RN.cssToRN(property, value))
                     .map(([property, value]) => [`"${property}"`, `function() { return ${serialize(value)} }`])
 
-                if (platform && platform !== Platform.Native && platform !== currentPlatform) {
-                    return null
+                if (platform) {
+                    const isTV = currentPlatform === Platform.AndroidTV || currentPlatform === Platform.AppleTV
+                    const commonPlatform = isTV ? Platform.TV : Platform.Native
+
+                    if (platform !== commonPlatform && platform !== currentPlatform) {
+                        return null
+                    }
                 }
 
                 if (entries.length === 0) {

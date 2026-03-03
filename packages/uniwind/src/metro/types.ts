@@ -11,6 +11,7 @@ import type {
     TokenOrValue,
     UnresolvedColor,
 } from 'lightningcss'
+import { Platform } from '../common/consts'
 import { ColorScheme, Orientation } from '../types'
 
 export type Polyfills = {
@@ -24,6 +25,7 @@ export type UniwindConfig = {
     dtsFile?: string
     polyfills?: Polyfills
     debug?: boolean
+    isTV?: boolean
 }
 
 export type MediaQueryResolver = {
@@ -40,13 +42,6 @@ export type MediaQueryResolver = {
     active: boolean | null
     focus: boolean | null
     dataAttributes: Record<string, string> | null
-}
-
-export const enum Platform {
-    Android = 'android',
-    iOS = 'ios',
-    Web = 'web',
-    Native = 'native',
 }
 
 type TakeArray<T> = T extends Array<any> ? T : never

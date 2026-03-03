@@ -2,9 +2,10 @@ import fs from 'fs'
 import type { JsTransformerConfig, JsTransformOptions } from 'metro-transform-worker'
 import path from 'path'
 import { name } from '../../package.json'
+import { Platform } from '../common/consts'
 import { compileVirtual } from './compileVirtual'
 import { injectThemes } from './injectThemes'
-import { Platform, UniwindConfig } from './types'
+import { UniwindConfig } from './types'
 
 let worker: typeof import('metro-transform-worker')
 
@@ -52,6 +53,22 @@ export const transform = async (
         return worker.transform(config, projectRoot, filePath, data, options)
     }
 
+    const getPlatform = () => {
+        if (!config.uniwind.isTV) {
+            return options.platform as Platform
+        }
+
+        if (options.platform === Platform.Android) {
+            return Platform.AndroidTV
+        }
+
+        if (options.platform === Platform.iOS) {
+            return Platform.AppleTV
+        }
+
+        throw new Error(`Platform ${options.platform} not supported`)
+    }
+
     const cssPath = path.join(process.cwd(), config.uniwind.cssEntryFile)
     const injectedThemesCode = await injectThemes({
         input: cssPath,
@@ -59,7 +76,7 @@ export const transform = async (
         dtsPath: config.uniwind.dtsFile,
     })
     const css = fs.readFileSync(filePath, 'utf-8')
-    const platform = options.platform as Platform
+    const platform = getPlatform()
     const virtualCode = await compileVirtual({
         css,
         platform,
