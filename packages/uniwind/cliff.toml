@@ -14,20 +14,17 @@ body = """
 {% endif -%}
 
 {% set order = ["🚀 Features", "🐛 Bug Fixes", "🔨 Refactoring", "⚡ Performance", "📚 Documentation", "🧪 Testing", "🏠 Chores", "📦 Other"] %}
-{% set grouped = commits | group_by(attribute="group") %}
-{% for group in order %}{% if group in grouped %}
+{% for group in order %}{% set group_commits = commits | filter(attribute="group", value=group) %}{% if group_commits | length > 0 %}
   ### {{ group }}
-  {% for commit in grouped[group] %}
+  {%- for commit in group_commits %}
     {%- if commit.remote.pr_title -%}
       {%- set commit_message = commit.remote.pr_title -%}
     {%- else -%}
       {%- set commit_message = commit.message -%}
-    {%- endif -%}
-    * {{ commit_message | split(pat="\n") | first | trim }}\
-      {% if commit.remote.username %} by @{{ commit.remote.username }}{%- endif -%}
-      {% if commit.remote.pr_number %} in \
-        [#{{ commit.remote.pr_number }}]({{ self::remote_url() }}/pull/{{ commit.remote.pr_number }})\
-      {%- endif %}
+    {%- endif %}
+  * {{ commit_message | split(pat="\n") | first | trim -}}
+    {%- if commit.remote.username %} by @{{ commit.remote.username }}{% endif -%}
+    {%- if commit.remote.pr_number %} in [#{{ commit.remote.pr_number }}]({{ self::remote_url() }}/pull/{{ commit.remote.pr_number }}){% endif %}
   {%- endfor %}
 {% endif %}{% endfor -%}
 
