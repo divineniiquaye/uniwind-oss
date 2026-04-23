@@ -1,4 +1,19 @@
-## What's Changed in 1.6.2
+## What's Changed in 1.6.3
+
+
+
+### 🐛 Bug Fixes
+* fix: use node resolver to prevent escaped traversal errors by @Brentlok in [#506](https://github.com/uni-stack/uniwind/pull/506)
+* fix: updateCSSVariable inside scoped theme by @Brentlok in [#502](https://github.com/uni-stack/uniwind/pull/502)
+* fix: inject cjs instead of esm to initialize by @Brentlok in [#501](https://github.com/uni-stack/uniwind/pull/501)
+
+
+### 🏠 Chores
+* chore: update config attributes and lint rules by @Brentlok in [#504](https://github.com/uni-stack/uniwind/pull/504)
+* chore: use oxlint instead of eslint by @Brentlok in [#503](https://github.com/uni-stack/uniwind/pull/503)
+
+
+**Full Changelog**: https://github.com/uni-stack/uniwind/compare/v1.6.2...v1.6.3## What's Changed in 1.6.2
 
 
 
